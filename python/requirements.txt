@@ -1,0 +1,8 @@
+numpy
+scipy
+matplotlib
+pandas
+pysam
+HTSeq
+biopython
+pyfasta
