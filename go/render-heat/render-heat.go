@@ -5,17 +5,6 @@
 package main
 
 import (
-	"code.google.com/p/biogo.graphics/palette"
-	"code.google.com/p/biogo.graphics/palette/brewer"
-	"code.google.com/p/biogo.graphics/rings"
-	"code.google.com/p/biogo/feat"
-	"code.google.com/p/biogo/feat/genome"
-	"code.google.com/p/biogo/feat/genome/mouse/mm10"
-
-	"code.google.com/p/plotinum/plot"
-	"code.google.com/p/plotinum/plotter"
-	"code.google.com/p/plotinum/vg"
-
 	"encoding/json"
 	"errors"
 	"flag"
@@ -25,6 +14,18 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/biogo/biogo/feat"
+	"github.com/biogo/biogo/feat/genome"
+	"github.com/biogo/biogo/feat/genome/mouse/mm10"
+	"github.com/biogo/graphics/palette"
+	"github.com/biogo/graphics/palette/brewer"
+	"github.com/biogo/graphics/rings"
+
+	"github.com/gonum/plot"
+	"github.com/gonum/plot/plotter"
+	"github.com/gonum/plot/vg"
+	"github.com/gonum/plot/vg/draw"
 )
 
 var (
@@ -117,7 +118,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	mm, lo, hi, err := mouseTracks(rna.Features, highlight, palname, vg.Centimeters(15), rna.Min-rna.Max)
+	mm, lo, hi, err := mouseTracks(rna.Features, highlight, palname, 15*vg.Centimeter, rna.Min-rna.Max)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -147,9 +148,9 @@ heat range: [%f,%f]`,
 		rna.MinID,
 		rna.Min, rna.Max,
 		lo, hi)
-	p.Title.TextStyle = plot.TextStyle{Color: color.Gray{0}, Font: font}
+	p.Title.TextStyle = draw.TextStyle{Color: color.Gray{0}, Font: font}
 
-	err = p.Save(vg.Centimeters(19).Inches(), vg.Centimeters(25).Inches(),
+	err = p.Save(19*vg.Centimeter, 25*vg.Centimeter,
 		decorate(filepath.Base(rna.Sample), format, rna.Filter),
 	)
 	if err != nil {
@@ -418,7 +419,7 @@ func mouseTracks(scores []rings.Scorer, highlight []string, palname string, diam
 	if err != nil {
 		return nil, 0, 0, err
 	}
-	lb.TextStyle = plot.TextStyle{Color: color.Gray16{0}, Font: font}
+	lb.TextStyle = draw.TextStyle{Color: color.Gray16{0}, Font: font}
 	p = append(p, lb)
 
 	s, err := rings.NewScores(scores, mm, radius*heatInner, radius*heatOuter,
@@ -440,8 +441,8 @@ func mouseTracks(scores []rings.Scorer, highlight []string, palname string, diam
 	}
 	t, err := rings.NewScores(traces, mm, radius*traceInner, radius*traceOuter,
 		&rings.Trace{
-			LineStyles: func() []plot.LineStyle {
-				ls := []plot.LineStyle{sty, sty}
+			LineStyles: func() []draw.LineStyle {
+				ls := []draw.LineStyle{sty, sty}
 				for i, c := range brewer.Set1[3].Colors()[:len(ls)] {
 					nc := color.NRGBAModel.Convert(c).(color.NRGBA)
 					nc.A = 0x80
@@ -455,10 +456,10 @@ func mouseTracks(scores []rings.Scorer, highlight []string, palname string, diam
 				Grid:      plotter.DefaultGridLineStyle,
 				LineStyle: sty,
 				Tick: rings.TickConfig{
-					Marker:    plot.DefaultTicks,
+					Marker:    plot.DefaultTicks{},
 					LineStyle: sty,
 					Length:    2,
-					Label:     plot.TextStyle{Color: color.Gray16{0}, Font: smallFont},
+					Label:     draw.TextStyle{Color: color.Gray16{0}, Font: smallFont},
 				},
 			},
 		},
@@ -482,8 +483,8 @@ func mouseTracks(scores []rings.Scorer, highlight []string, palname string, diam
 	}
 	ct, err := rings.NewScores(counts, mm, radius*countsInner, radius*countsOuter,
 		&rings.Trace{
-			LineStyles: func() []plot.LineStyle {
-				ls := []plot.LineStyle{sty}
+			LineStyles: func() []draw.LineStyle {
+				ls := []draw.LineStyle{sty}
 				ls[0].Color = color.Gray16{0}
 				return ls
 			}(),
@@ -493,10 +494,10 @@ func mouseTracks(scores []rings.Scorer, highlight []string, palname string, diam
 				Grid:      plotter.DefaultGridLineStyle,
 				LineStyle: sty,
 				Tick: rings.TickConfig{
-					Marker:    plot.DefaultTicks,
+					Marker:    plot.DefaultTicks{},
 					LineStyle: sty,
 					Length:    2,
-					Label:     plot.TextStyle{Color: color.Gray16{0}, Font: smallFont},
+					Label:     draw.TextStyle{Color: color.Gray16{0}, Font: smallFont},
 				},
 			},
 		},
@@ -542,12 +543,12 @@ func (b colorBand) FillColor() color.Color {
 	}
 }
 
-func (b colorBand) LineStyle() plot.LineStyle {
+func (b colorBand) LineStyle() draw.LineStyle {
 	switch b.Giemsa {
 	case "acen":
-		return plot.LineStyle{Color: color.RGBA{R: 0xff, A: 0xff}, Width: 1}
+		return draw.LineStyle{Color: color.RGBA{R: 0xff, A: 0xff}, Width: 1}
 	case "gneg", "gpos25", "gpos33", "gpos50", "gpos66", "gpos75", "gpos100":
-		return plot.LineStyle{}
+		return draw.LineStyle{}
 	default:
 		panic("unexpected giemsa value")
 	}
