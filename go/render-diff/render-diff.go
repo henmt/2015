@@ -18,11 +18,11 @@ import (
 	"github.com/biogo/biogo/feat"
 	"github.com/biogo/biogo/feat/genome"
 	"github.com/biogo/biogo/feat/genome/mouse/mm10"
-	"github.com/biogo/graphics/palette/brewer"
 	"github.com/biogo/graphics/rings"
 	"github.com/biogo/rnaseq/norm"
 
 	"github.com/gonum/plot"
+	"github.com/gonum/plot/palette/brewer"
 	"github.com/gonum/plot/plotter"
 	"github.com/gonum/plot/vg"
 	"github.com/gonum/plot/vg/draw"

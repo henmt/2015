@@ -1,13 +1,13 @@
 package main
 
 import (
-	"code.google.com/p/biogo/io/featio"
-	"code.google.com/p/biogo/io/featio/gff"
-
 	"fmt"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/biogo/biogo/io/featio"
+	"github.com/biogo/biogo/io/featio/gff"
 )
 
 func mustAtoi(s string) int {

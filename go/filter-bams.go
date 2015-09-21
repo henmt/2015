@@ -5,12 +5,12 @@
 package main
 
 import (
-	"code.google.com/p/biogo.boom"
-
 	"flag"
 	"fmt"
 	"io"
 	"os"
+
+	"github.com/biogo/boom"
 )
 
 var (

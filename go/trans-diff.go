@@ -5,11 +5,6 @@
 package main
 
 import (
-	"code.google.com/p/biogo.boom"
-	"code.google.com/p/biogo.interval"
-	"code.google.com/p/biogo/feat/genome/mouse/mm10"
-	"code.google.com/p/biogo/io/featio"
-	"code.google.com/p/biogo/io/featio/gff"
 	"errors"
 	"flag"
 	"fmt"
@@ -18,6 +13,12 @@ import (
 	"os"
 	"strings"
 	"unsafe"
+
+	"github.com/biogo/biogo/feat/genome/mouse/mm10"
+	"github.com/biogo/biogo/io/featio"
+	"github.com/biogo/biogo/io/featio/gff"
+	"github.com/biogo/boom"
+	"github.com/biogo/store/interval"
 )
 
 var (
@@ -189,7 +190,7 @@ func filterFeats(annot string, classes, names []string, thresh float64) ([]inter
 		return nil, err
 	}
 	fs := featio.NewScanner(gff.NewReader(f))
-	for fs.Scan() {
+	for fs.Next() {
 		f := fs.Feat().(*gff.Feature)
 		if f.FeatScore == nil || math.Exp(*f.FeatScore) < thresh {
 			continue

@@ -5,11 +5,6 @@
 package main
 
 import (
-	"code.google.com/p/biogo.boom"
-	"code.google.com/p/biogo.interval"
-	"code.google.com/p/biogo/feat/genome/mouse/mm10"
-	"code.google.com/p/biogo/io/featio"
-	"code.google.com/p/biogo/io/featio/gff"
 	"errors"
 	"flag"
 	"fmt"
@@ -17,6 +12,12 @@ import (
 	"os"
 	"sort"
 	"strings"
+
+	"github.com/biogo/biogo/feat/genome/mouse/mm10"
+	"github.com/biogo/biogo/io/featio"
+	"github.com/biogo/biogo/io/featio/gff"
+	"github.com/biogo/boom"
+	"github.com/biogo/store/interval"
 )
 
 var (
